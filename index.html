@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Response Rate Monitoring</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Data Response Rate Monitoring</h1>
+    <div class="datetime">YYYY.MM.DD HH:MM:SS</div>
+  </header>
+
+  <main class="layout">
+    <!-- LEFT PANEL -->
+    <section class="left-panel">
+      <div class="top-cards">
+        <div class="card" id = "inverter-card">
+          <h2>Hybrid Inverter</h2>
+          <label>Last Received Time</label>
+          <p> - </p>
+          <label>Update Interval</label>
+          <p> - </p>
+          <label>Mode</label>
+          <p>Power On Mode</p>
+        </div>
+
+        <div class="card" id = "bms-card">
+          <h2>BMS</h2>
+          <label>Last Received Time</label>
+          <p> - </p>
+          <label>Update Interval</label>
+          <p> - </p>
+          <label>Mode</label>
+          <p>Standby</p>
+        </div>
+
+        <div class="card" id = "sensor-card">
+          <h2>Sensor</h2>
+          <label>Last Received Time</label>
+          <p> - </p>
+          <label>Update Interval</label>
+          <p> - </p>
+        </div>
+
+        <div class="card control">
+          <h2>Control</h2>
+          <div class="btn-group">
+            <button class="btn">Charge</button>
+            <button class="btn">Standby</button>
+            <button class="btn">Discharge</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <h3>Cumulative Communication Summary</h3>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Request Count</th>
+              <th>Response Count</th>
+              <th>Error Count</th>
+              <th>Response Rate(%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-device="inverter"><td>Hybrid Inverter</td><td>0</td><td>0</td><td>0</td><td><span class="dot green"></span>0</td></tr>
+            <tr data-device="bms"><td>BMS</td><td>0</td><td>0</td><td>0</td><td><span class="dot green"></span>0</td></tr>
+            <tr data-device="sensor"><td>Sensor</td><td>0</td><td>0</td><td>0</td><td><span class="dot green"></span>0</td></tr>
+            <tr style="font-weight: 900;"><td>Total</td><td>0</td><td>0</td><td>0</td><td><span class="dot green"></span>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="log-filter">
+        <h3>Log Filter</h3>
+        <div class="log-box">
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <section class="right-panel">
+        <div class="monitor">
+            <div class="monitor-header">
+                <h3>Communication Monitoring<br><small>(Request / Response / Error)</small></h3>
+                <div class="radio-group">
+                <label><input type="radio" name="device" value="inverter" checked> Inverter</label>
+                <label><input type="radio" name="device" value="bms"> BMS</label>
+                <label><input type="radio" name="device" value="sensor"> Sensor</label>
+                </div>
+            </div>
+        <div class="log-window">
+        </div>
+        </div>
+
+      <div class="button-row">
+        <button class="btn small">START</button>
+        <button class="btn small">STOP</button>
+        <button class="btn small">CLEAR</button>
+        <button class="btn small">SAVE</button>
+    </div>
+</section>
+</main>
+<script src="main.js"></script>
+</body>

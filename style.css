@@ -1,0 +1,337 @@
+/* =============== Global =============== */
+body {
+  font-family: 'Pretendard', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5;
+  color: #222;
+  font-size: 0.95rem;       /* ✅ 기본 폰트 */
+  line-height: 1.5;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 3rem;
+  border-bottom: 3px solid #007bff;
+  background: #fff;
+}
+
+header h1 {
+  font-size: 1.8rem;       /* ✅ 대제목 */
+  font-weight: 700;
+  letter-spacing: -0.02rem;
+}
+
+header .datetime {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #666;
+}
+
+/* MAIN LAYOUT */
+.layout {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+}
+
+/* LEFT PANEL */
+.left-panel {
+  flex: 2;
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* RIGHT PANEL */
+.right-panel {
+  flex: 1.5;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+/* =============== Top Cards =============== */
+.top-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  align-items: stretch;
+  grid-auto-rows: 1fr; /* ✅ 모든 카드의 row 높이 통일 */
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.card h2 {
+  font-size: 1.3rem;       /* ✅ 중제목 */
+  font-weight: 800;
+  color: #033264;
+}
+
+.card label {
+  font-weight: 600;
+  display: block;
+  margin-top: 0.5rem;
+  color: #333;
+}
+
+.card p {
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 0.4rem 0.5rem;
+  text-align: center;
+  margin: 0.2rem 0;
+}
+
+/* CONTROL CARD */
+.card.control {
+  min-width: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.control .btn-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  height: 100%;
+}
+
+.btn {
+  border: 1px solid #007bff;
+  background: #fff;
+  color: #007bff;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.btn.active {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+/* =============== Summary & Log Filter =============== */
+.summary,
+.log-filter {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.summary h3,
+.log-filter h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #033264;
+}
+
+.summary table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  background: #fafafa;
+}
+
+.summary th {
+  background: #e9ecef;
+  padding: 0.6rem;
+  border-bottom: 2px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.summary td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.dot.green { background: #27ae60; }
+.dot.yellow { background: #f1c40f; }
+.dot.red { background: #e74c3c; }
+
+.log-box {
+  background: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.8rem;
+  height: 100px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+/* =============== Communication Monitoring =============== */
+.monitor {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-grow: 0;
+  height: 100%;
+}
+
+/* Header 내부 제목/라디오 그룹 */
+.monitor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* ✅ 세로 중앙 정렬 */
+  margin-bottom: 0.5rem;
+}
+
+.monitor-header h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #033264;
+  margin: 0;
+}
+
+.monitor-header small {
+  color: #555;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+/* 라디오 버튼 */
+.radio-group {
+  display: flex;
+  gap: 0.9rem;
+  align-self: last baseline;
+  margin-top: 0.2rem;
+  margin-right: 0.5rem;
+}
+
+.radio-group label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  accent-color: #007bff;
+  margin-right: 0.5rem;
+  transform: scale(1.1);
+}
+
+/* 로그창 */
+.log-window {
+  margin-top: 0.8rem;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.6rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  background: #fafafa;
+  height: 650px;
+
+}
+
+/* =============== 버튼 하단 =============== */
+.button-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ 4분할 균등 */
+  gap: 0.6rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.btn.small {
+  width: 100%;
+  padding: 0.75rem 0;     /* ✅ 세로 여유 */
+  font-size: 0.95rem;
+  line-height: 1.3;
+  font-weight: 600;
+  border: 1px solid #007bff;
+  border-radius: 6px;
+  background: #fff;
+  color: #007bff;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+  min-height: 42px;       /* ✅ 눌림 방지 */
+}
+
+.btn.small:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn.small.active {
+  background: #007bff;
+  color: #fff;
+}
+
+.log-window span.tx {
+  color: #007bff; /* 파란색 */
+}
+
+.log-window span.rx {
+  color: #555; /* 회색 */
+}
+
+/* =============== 반응형 =============== */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column;
+  }
+  header h1 {
+    font-size: 1.5rem;
+  }
+}
