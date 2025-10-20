@@ -17,6 +17,8 @@ let lastResponseTime = { inverter: null, bms: null, sensor: null };
 let lastReceivedTime = { inverter: null, bms: null, sensor: null };
 let lastInterval = { inverter: "-", bms: "-", sensor: "-" };
 
+const basePath = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/Data`;
+
 let summaryCount = {
   inverter: { rx: 0, tx: 0 },
   bms: { rx: 0, tx: 0 },
@@ -95,7 +97,6 @@ function appendLog(device, rawLine, direction) {
 
 
 // =============== 장치별 시뮬레이션 루프 ===============
-// =============== 장치별 시뮬레이션 루프 ===============
 async function startDeviceLoop(device) {
   const lines = logData[device];
   if (!lines.length) return;
@@ -162,9 +163,9 @@ async function startSimulation() {
   logRunning = true;
 
   await Promise.all([
-    loadFile("inverter", "Data/hybrid_sim_2000.txt"),
-    loadFile("bms", "Data/bms_sim_2000.txt"),
-    loadFile("sensor", "Data/sensor_sim_2000.txt"),
+    loadFile("inverter", `${basePath}/hybrid_sim_2000.txt`),
+    loadFile("bms", `${basePath}/bms_sim_2000.txt`),
+    loadFile("sensor", `${basePath}/sensor_sim_2000.txt`),
   ]);
 
   console.log("✅ 시뮬레이션 시작");
