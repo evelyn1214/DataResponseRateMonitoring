@@ -17,7 +17,7 @@ let lastResponseTime = { inverter: null, bms: null, sensor: null };
 let lastReceivedTime = { inverter: null, bms: null, sensor: null };
 let lastInterval = { inverter: "-", bms: "-", sensor: "-" };
 
-const basePath = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/Data`;
+const basePath = `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/data`;
 
 let summaryCount = {
   inverter: { rx: 0, tx: 0 },
@@ -335,4 +335,5 @@ document.querySelectorAll(".button-row .btn.small").forEach(btn => {
     else if (action === "STOP") stopSimulation();
     else if (action === "CLEAR") clearLogs();
   });
+
 });
