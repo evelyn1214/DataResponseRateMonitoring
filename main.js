@@ -20,14 +20,16 @@ let lastInterval = { inverter: "-", bms: "-", sensor: "-" };
 const basePath = `https://evelyn1214.github.io/DataResponseRateMonitoring/data`;
 
 let summaryCount = {
-  inverter: { rx: 0, tx: 0 },
-  bms: { rx: 0, tx: 0 },
-  sensor: { rx: 0, tx: 0 }
+  inverter: { rx: 0, tx: 0, error: 0 },
+  bms: { rx: 0, tx: 0, error: 0 },
+  sensor: { rx: 0, tx: 0, error: 0 },
 };
 
 let loopCount = { inverter: 0, bms: 0, sensor: 0 };
 let logStorage = { inverter: [], bms: [], sensor: [] };
 let logData = { inverter: [], bms: [], sensor: [] };
+
+let loopOffset = { inverter: 0, bms: 0, sensor: 0 };
 
 const logBox = document.querySelector(".log-window");
 
@@ -101,6 +103,8 @@ async function startDeviceLoop(device) {
   const lines = logData[device];
   if (!lines.length) return;
 
+  
+  let startIndex = loopOffset[device] % lines.length;
   loopCount[device] = 0;
 
   // ✅ Inverter, Sensor만 Tx 누락 발생 (100회당 0~1개)
@@ -121,6 +125,9 @@ async function startDeviceLoop(device) {
     const i = loopCount[device];
     if (i >= maxLoopCount) {
       console.log(`🛑 ${device.toUpperCase()} ${maxLoopCount}회 도달`);
+
+      loopOffset[device] = (startIndex + i * 2) % lines.length;
+
       checkAllDevicesDone();
       return;
     }
@@ -140,14 +147,16 @@ async function startDeviceLoop(device) {
         if (logRunning) {
           const resLine = lines[(i * 2 + 1) % lines.length];
           appendLog(device, resLine, "TX");
+          // ❌ summaryCount[device].tx++; 제거
           updateSummaryTable();
         }
       }, delay);
     } else {
       console.log(`🚫 ${device} TX 누락 (index: ${i})`);
-      summaryCount[device].error = (summaryCount[device].error || 0) + 1;
+      summaryCount[device].error++; // ✅ 에러 카운트 증가
       updateSummaryTable();
     }
+
 
     loopCount[device]++;
     setTimeout(loop, logIntervalTime);
@@ -200,24 +209,23 @@ function clearLogs() {
   logBox.innerHTML = "";
 
   Object.keys(logStorage).forEach(k => (logStorage[k] = []));
-  Object.keys(summaryCount).forEach(k => (summaryCount[k] = { rx: 0, tx: 0 }));
+  Object.keys(summaryCount).forEach(k => (summaryCount[k] = { rx: 0, tx: 0, error: 0 })); // ✅ error 유지
   Object.keys(lastRequestTime).forEach(k => (lastRequestTime[k] = null));
   Object.keys(lastResponseTime).forEach(k => (lastResponseTime[k] = null));
   Object.keys(lastReceivedTime).forEach(k => (lastReceivedTime[k] = null));
   Object.keys(lastInterval).forEach(k => (lastInterval[k] = "-"));
   Object.keys(loopCount).forEach(k => (loopCount[k] = 0));
+  Object.keys(loopOffset).forEach(k => (loopOffset[k] = 0)); 
 
   updateSummaryTable();
   updateAllCards();
 
-  // ✅ START 버튼 active 제거
   document.querySelectorAll(".button-row .btn.small").forEach(btn => {
     btn.classList.remove("active");
   });
 
   console.log("🧹 초기화 완료 (START 버튼 비활성화)");
-  
-  logFilterAppend("[SYSTEM] Communication: CLEAR")
+  logFilterAppend("[SYSTEM] Communication: CLEAR");
 }
 
 // =============== 요약표 업데이트 ===============
@@ -233,30 +241,35 @@ function updateSummaryTable() {
     const row = tbody.querySelector(`tr[data-device='${device}']`);
     if (!row) return;
 
-    const request = summaryCount[device].rx;
-    const response = summaryCount[device].tx;
-    const err = summaryCount[device].error || (request > response ? request - response : 0);
-    const rate = request ? ((response / request) * 100).toFixed(1) : 0;
+    const request = summaryCount[device].rx || 0;
+    const response = summaryCount[device].tx || 0;
+    const error = Math.max(request - response, 0); // ✅ 자동 계산
 
+    const rate =
+      request > 0 ? ((response / request) * 100).toFixed(1) : "0.0";
+
+    // ✅ 색상 설정
     let dotColor = "green";
     if (rate < 80) dotColor = "red";
     else if (rate < 90) dotColor = "yellow";
 
+    // ✅ 테이블 반영
     row.children[1].textContent = request;
     row.children[2].textContent = response;
-    row.children[3].textContent = err;
+    row.children[3].textContent = error;
     row.children[4].innerHTML = `<span class="dot ${dotColor}"></span>${rate}`;
 
+    // ✅ 합산
     totalRequest += request;
     totalResponse += response;
-    totalError += err;
+    totalError += error;
   });
 
-  const totalRow = tbody.querySelector("tr[style*='font-weight: 900']");
+  // ✅ Total 행
+  const totalRow = tbody.querySelector("tr[style*='font-weight']");
   if (totalRow) {
-    const totalRate = totalRequest
-      ? ((totalResponse / totalRequest) * 100).toFixed(1)
-      : 0;
+    const totalRate =
+      totalRequest > 0 ? ((totalResponse / totalRequest) * 100).toFixed(1) : "0.0";
 
     let totalDot = "green";
     if (totalRate < 80) totalDot = "red";
@@ -335,6 +348,4 @@ document.querySelectorAll(".button-row .btn.small").forEach(btn => {
     else if (action === "STOP") stopSimulation();
     else if (action === "CLEAR") clearLogs();
   });
-
 });
-
