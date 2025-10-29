@@ -7,9 +7,9 @@ let logRunning = false;
 let logInterval = null;
 let logIndex = 0;
 
-let logIntervalTime = 500;        // 각 사이클 간격 (ms)
-let responseDelayMin = 100;        // RX 최소 지연 (ms)
-let responseDelayMax = 200;        // RX 최대 지연 (ms)
+let logIntervalTime = 3000;        // 각 사이클 간격 (ms)
+let responseDelayMin = 300;        // RX 최소 지연 (ms)
+let responseDelayMax = 500;        // RX 최대 지연 (ms)
 let maxLoopCount = 100;     // 한 바퀴 100세트
 
 let lastRequestTime = { inverter: null, bms: null, sensor: null };
@@ -349,3 +349,4 @@ document.querySelectorAll(".button-row .btn.small").forEach(btn => {
     else if (action === "CLEAR") clearLogs();
   });
 });
+
