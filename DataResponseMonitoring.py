@@ -13,9 +13,9 @@ devices = {
     "SENSOR": "data/sensor_sim_2000.txt"
 }
 
-logIntervalTime = 5.0        # 각 사이클 간격 (s)
+logIntervalTime = 3.0        # 각 사이클 간격 (s)
 responseDelayMin = 0.2       # RX 최소 지연 (s)
-responseDelayMax = 0.7       # RX 최대 지연 (s)
+responseDelayMax = 0.5       # RX 최대 지연 (s)
 
 # ============================
 #  로그 출력 함수
