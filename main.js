@@ -103,21 +103,11 @@ async function startDeviceLoop(device) {
   const lines = logData[device];
   if (!lines.length) return;
 
-  
   let startIndex = loopOffset[device] % lines.length;
   loopCount[device] = 0;
 
-  // ✅ Inverter, Sensor만 Tx 누락 발생 (100회당 0~1개)
-  let dropCount = 0;
-  if (device === "inverter" || device === "sensor") {
-    dropCount = Math.floor(Math.random() * 2); // 0 또는 1
-  }
-
-  const dropIndices = new Set();
-  while (dropIndices.size < dropCount) {
-    dropIndices.add(Math.floor(Math.random() * maxLoopCount)); // 0~99 중 하나
-  }
-  console.log(`⚠️ ${device.toUpperCase()} Tx 누락 인덱스:`, [...dropIndices]);
+  // ✅ 불필요한 Tx 누락 관련 코드 완전 제거
+  console.log(`▶️ ${device.toUpperCase()} 시뮬레이션 시작`);
 
   const loop = async () => {
     if (!logRunning) return;
@@ -125,9 +115,7 @@ async function startDeviceLoop(device) {
     const i = loopCount[device];
     if (i >= maxLoopCount) {
       console.log(`🛑 ${device.toUpperCase()} ${maxLoopCount}회 도달`);
-
       loopOffset[device] = (startIndex + i * 2) % lines.length;
-
       checkAllDevicesDone();
       return;
     }
@@ -137,32 +125,23 @@ async function startDeviceLoop(device) {
     appendLog(device, reqLine, "RX");
 
     // ✅ Response (Tx)
-    const dropThis = dropIndices.has(i);
-    if (!dropThis) {
-      const delay =
-        Math.floor(Math.random() * (responseDelayMax - responseDelayMin + 1)) +
-        responseDelayMin;
+    const delay =
+      Math.floor(Math.random() * (responseDelayMax - responseDelayMin + 1)) +
+      responseDelayMin;
 
-      setTimeout(() => {
-        if (logRunning) {
-          const resLine = lines[(i * 2 + 1) % lines.length];
-          appendLog(device, resLine, "TX");
-          // ❌ summaryCount[device].tx++; 제거
-          updateSummaryTable();
-        }
-      }, delay);
-    } else {
-      console.log(`🚫 ${device} TX 누락 (index: ${i})`);
-      summaryCount[device].error++; // ✅ 에러 카운트 증가
-      updateSummaryTable();
-    }
-
+    setTimeout(() => {
+      if (logRunning) {
+        const resLine = lines[(i * 2 + 1) % lines.length];
+        appendLog(device, resLine, "TX");
+        updateSummaryTable();
+      }
+    }, delay);
 
     loopCount[device]++;
     setTimeout(loop, logIntervalTime);
   };
 
-  loop();
+  loop(); // 최초 1회 실행
 }
 
 
@@ -349,5 +328,3 @@ document.querySelectorAll(".button-row .btn.small").forEach(btn => {
     else if (action === "CLEAR") clearLogs();
   });
 });
-
-
